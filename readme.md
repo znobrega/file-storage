@@ -90,4 +90,5 @@ http://localhost:8090/swagger/index.html
 - [ ]  Add a domain to directory
 - [ ]  Adapt the API to handle multiple file upload
 - [ ]  100% Test coverage
+- [ ]  Add packr
 
