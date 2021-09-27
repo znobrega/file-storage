@@ -714,7 +714,7 @@
         }
     },
     "securityDefinitions": {
-        "userIdAuthentication \"test\"": {
+        "userIdAuthentication": {
             "type": "apiKey",
             "name": "Authorization",
             "in": "header"

@@ -3,6 +3,7 @@ package controllers
 import (
 	"encoding/json"
 	"github.com/go-chi/chi/v5"
+	"github.com/znobrega/file-storage/internal/configs"
 	"github.com/znobrega/file-storage/pkg/domain/usecases"
 	"github.com/znobrega/file-storage/pkg/dto"
 	"github.com/znobrega/file-storage/pkg/infra/helpers"
@@ -76,7 +77,7 @@ func NewFileController(
 // @Router /files [post]
 func (i fileController) HandleFileUpload() func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
-		err := r.ParseMultipartForm(1)
+		err := r.ParseMultipartForm(1 + configs.Viper.GetInt64("files.sizeLimit"))
 		if err != nil {
 			helpers.ReturnHttpError(w, 400, err)
 			return
@@ -410,8 +411,7 @@ func (i fileController) HandleListByDirectory() func(w http.ResponseWriter, r *h
 // @Router /files/{id}/replace [patch]
 func (i fileController) HandleFileReplace() func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
-		// TODO ADD MEMORY
-		err := r.ParseMultipartForm(1)
+		err := r.ParseMultipartForm(1 + configs.Viper.GetInt64("files.sizeLimit"))
 		if err != nil {
 			helpers.ReturnHttpError(w, 400, err)
 			return

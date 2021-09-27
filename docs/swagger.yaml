@@ -457,7 +457,7 @@ paths:
       tags:
       - Users
 securityDefinitions:
-  userIdAuthentication "test":
+  userIdAuthentication:
     in: header
     name: Authorization
     type: apiKey

@@ -17,7 +17,7 @@ database:
   insertBatchSize: 500
   showSql: true
   dialect: "postgres"
-  connectionUri: "host=localhost port=5432 user=postgres password=admin dbname=file_challenge sslmode=disable"
+  connectionUri: "host=db port=5432 user=challenge password=challenge dbname=challenge sslmode=disable"
   migrations:
     enabled: true
     directory: "./internal/db/migrations"

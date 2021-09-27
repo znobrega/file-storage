@@ -16,7 +16,7 @@ import (
 
 // @host localhost:8090
 
-// @securityDefinitions.apikey userIdAuthentication "test"
+// @securityDefinitions.apikey userIdAuthentication
 // @in header
 // @name Authorization
 func main() {
