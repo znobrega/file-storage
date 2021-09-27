@@ -1,0 +1,26 @@
+# ENV VARIABLES
+
+application:
+  name: "Shopify challenge"
+  version: "1.0.0"
+
+server:
+  port: "8090"
+
+files:
+  directory: "files"
+  host: "localhost"
+  # limit the size file in bytes
+  sizeLimit: 10900909090
+
+database:
+  insertBatchSize: 500
+  showSql: true
+  dialect: "postgres"
+  connectionUri: "host=localhost port=5432 user=postgres password=admin dbname=file_challenge sslmode=disable"
+  migrations:
+    enabled: true
+    directory: "./internal/db/migrations"
+
+jwt:
+  secret: "sdfgjo43029q587aKLJF4535fgadsfd!@#$*W$%Y L"

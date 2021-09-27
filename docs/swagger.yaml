@@ -1,0 +1,464 @@
+definitions:
+  dto.Directories:
+    properties:
+      directories:
+        items:
+          $ref: '#/definitions/dto.Directory'
+        type: array
+    type: object
+  dto.Directory:
+    properties:
+      path:
+        type: string
+    type: object
+  dto.FileList:
+    properties:
+      files:
+        items:
+          type: string
+        type: array
+    type: object
+  dto.FilePublic:
+    properties:
+      createdAt:
+        type: string
+      directory:
+        type: string
+      extension:
+        type: string
+      fileId:
+        type: string
+      fileSize:
+        type: string
+      isPublic:
+        type: boolean
+      name:
+        type: string
+      path:
+        type: string
+      updatedAt:
+        type: string
+      url:
+        type: string
+      userId:
+        type: integer
+    type: object
+  dto.FileResponse:
+    properties:
+      files:
+        items:
+          $ref: '#/definitions/dto.FilePublic'
+        type: array
+    type: object
+  dto.LoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  dto.User:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      email:
+        type: string
+      name:
+        type: string
+      updatedAt:
+        type: string
+      userId:
+        type: integer
+    type: object
+  dto.UserRequest:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+    type: object
+  dto.Users:
+    properties:
+      users:
+        items:
+          $ref: '#/definitions/dto.User'
+        type: array
+    type: object
+  helpers.TokenResponse:
+    properties:
+      acessToken:
+        type: string
+      expiryDate:
+        type: string
+      userId:
+        type: integer
+    type: object
+  routes.file:
+    $ref: '#/definitions/io.Writer'
+  usecases.UpdateFileDirectoryByIdParam:
+    properties:
+      fileId:
+        type: string
+      newDirectory:
+        type: string
+      userId:
+        type: integer
+    type: object
+host: localhost:8090
+info:
+  contact:
+    email: nobreqacarlosjr@gmail.com
+    name: Carlos Nóbrega
+  description: API documentation for File API
+  license: {}
+  termsOfService: http://swagger.io/terms/
+  title: File API
+  version: 1.0.0
+paths:
+  /files:
+    post:
+      consumes:
+      - application/json
+      description: Upload a new File
+      parameters:
+      - description: file to be uploaded
+        in: formData
+        name: files
+        required: true
+        type: file
+      - description: Indicates if the file is public or private
+        in: formData
+        name: isPublic
+        required: true
+        type: boolean
+      - description: Gives a custom name to the file
+        in: formData
+        name: filename
+        required: true
+        type: string
+      - description: Indicates the file directory
+        in: formData
+        name: directory
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.FileResponse'
+        "400":
+          description: Bad request
+      security:
+      - userIdAuthentication: []
+      summary: Upload a file
+      tags:
+      - Files
+  /files/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a  File
+      parameters:
+      - description: The identifier for the file
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.FileList'
+        "400":
+          description: Bad request
+      security:
+      - userIdAuthentication: []
+      summary: Deletes a file
+      tags:
+      - Files
+    get:
+      consumes:
+      - application/json
+      description: Find a  File
+      parameters:
+      - description: The identifier for the file
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.FilePublic'
+        "400":
+          description: Bad request
+      security:
+      - userIdAuthentication: []
+      summary: Find a file
+      tags:
+      - Files
+    patch:
+      consumes:
+      - application/json
+      description: Update a file directory
+      parameters:
+      - description: The identifier for the file
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: The identifier for the file
+        in: body
+        name: content
+        required: true
+        schema:
+          $ref: '#/definitions/usecases.UpdateFileDirectoryByIdParam'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.FilePublic'
+        "400":
+          description: Bad request
+      security:
+      - userIdAuthentication: []
+      summary: Update a file directory
+      tags:
+      - Files
+  /files/{id}/replace:
+    patch:
+      consumes:
+      - application/json
+      description: Replace a blob from a existent file
+      parameters:
+      - description: file to be uploaded
+        in: formData
+        name: files
+        required: true
+        type: file
+      - description: file to be replaced
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.FileResponse'
+        "400":
+          description: Bad request
+      security:
+      - userIdAuthentication: []
+      summary: Replace a blob from a existent file
+      tags:
+      - Files
+  /files/grep:
+    get:
+      consumes:
+      - application/json
+      description: List files by passing a directory
+      parameters:
+      - description: Attribute to get files under a directory
+        in: query
+        name: dir
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.FileResponse'
+      security:
+      - userIdAuthentication: []
+      summary: List files by passing a directory
+      tags:
+      - Files
+  /files/list/private:
+    get:
+      consumes:
+      - application/json
+      description: List public files
+      parameters:
+      - description: 'Limit of page records '
+        in: query
+        name: limit
+        required: true
+        type: string
+      - description: Page number
+        in: query
+        name: page
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.FileResponse'
+        "400":
+          description: Bad request
+      security:
+      - userIdAuthentication: []
+      summary: List public files
+      tags:
+      - Files
+  /files/list/public:
+    get:
+      consumes:
+      - application/json
+      description: List public files
+      parameters:
+      - description: The identifier for the file's user
+        in: query
+        name: user_id
+        type: string
+      - description: 'Limit of page records '
+        in: query
+        name: limit
+        required: true
+        type: string
+      - description: Page number
+        in: query
+        name: page
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.FileResponse'
+        "400":
+          description: Bad request
+      summary: List public files
+      tags:
+      - Files
+  /static/{fullfilepath}:
+    get:
+      consumes:
+      - application/json
+      description: Download static file (doesnt working on swagger)
+      parameters:
+      - description: Bearer <token> is required to download/view
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: 'router example: http://localhost:8090/static/example/updated/fix/splunk.pdf'
+        in: path
+        name: fullfilepath
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: file
+        "400":
+          description: Bad request
+      security:
+      - userIdAuthentication: []
+      summary: Download static file (doesnt working on swagger)
+      tags:
+      - Files
+  /users/:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new user
+      parameters:
+      - description: Object for creating the user
+        in: body
+        name: content
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UserRequest'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.User'
+      summary: Creates a new user
+      tags:
+      - Users
+    put:
+      consumes:
+      - application/json
+      description: Updates a user
+      parameters:
+      - description: Object for update the user
+        in: body
+        name: content
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UserRequest'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.User'
+      security:
+      - userIdAuthentication: []
+      summary: Updates a user
+      tags:
+      - Users
+  /users/findone:
+    get:
+      consumes:
+      - application/json
+      description: Find specific user
+      parameters:
+      - description: Attribute to get specific user
+        in: query
+        name: user_id
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.User'
+      summary: Find specific user
+      tags:
+      - Users
+  /users/list:
+    get:
+      consumes:
+      - application/json
+      description: list users
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.Users'
+      summary: list users
+      tags:
+      - Users
+  /users/login:
+    post:
+      consumes:
+      - application/json
+      description: Sign in a user
+      parameters:
+      - description: Object for sign in the user
+        in: body
+        name: content
+        required: true
+        schema:
+          $ref: '#/definitions/dto.LoginRequest'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.TokenResponse'
+      summary: Sign in a user
+      tags:
+      - Users
+securityDefinitions:
+  userIdAuthentication "test":
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
