@@ -12,11 +12,10 @@ services:
     links:
       - "db"
   db:
-    file: postgres:13-alpine
+    image: postgres:13-alpine
     environment:
       POSTGRES_PASSWORD: "challenge"
       POSTGRES_USER: "challenge"
       POSTGRES_DB: "challenge"
-
     ports:
       - "5433:5432"

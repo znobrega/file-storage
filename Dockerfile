@@ -18,6 +18,7 @@ RUN mkdir /go/bin/files
 COPY --from=builder /api/bin/api .
 COPY --from=builder /api/resources/application.yml resources/
 COPY --from=builder /api/internal internal/
+COPY --from=builder /api/docs docs/
 
 EXPOSE 8090
 ENTRYPOINT /go/bin/api
